@@ -112,53 +112,35 @@
     color: #000;
   }
 
-  /* A styled scrollbar only makes sense where there is a pointer. On touch
-     this replaced the platform's overlay scrollbar with a permanent 11px
-     gutter down the side of the page. */
-  @media (hover: hover) and (pointer: fine) and (min-width: 768px) {
-    ::-webkit-scrollbar {
-      width: 11px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--color-ink);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: color-mix(in srgb, var(--color-head) 18%, var(--color-ink));
-      border-radius: 9px;
-      border: 3px solid var(--color-ink);
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--color-accent-dark);
-    }
-  }
 
 
 }
 
 /*
- * Scrollbar chrome, gone below the md breakpoint — the page itself, and
- * anything that scrolls inside it.
+ * No scrollbar chrome anywhere — the page itself and anything that scrolls
+ * inside it: the nav drawer, the menu panels, the modal backdrop.
  *
  * Deliberately outside @layer base: a layered rule loses to any later layer
  * regardless of how specific it is, and the viewport scrollbar is exactly the
  * sort of thing a framework reset reaches for. Unlayered outranks every layer.
  * html and body are named as well as the universal selector because some
  * engines only honour the pseudo-element on the scroll container itself.
+ *
+ * Scrolling itself is untouched — wheel, trackpad, touch and keyboard all
+ * behave; only the indicator is suppressed.
  */
-@media (max-width: 767.98px) {
-  html,
-  body,
-  * {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  html::-webkit-scrollbar,
-  body::-webkit-scrollbar,
-  ::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    display: none;
-  }
+html,
+body,
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 /* Deliberately OUTSIDE @layer base. Tailwind puts .text-accent in the

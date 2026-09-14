@@ -39,6 +39,15 @@ const sizes = {
   lg: "px-6.5 py-3.5 text-[15px]",
 } as const;
 
+/** The button's class string, so a client-side anchor can wear the same look. */
+export function buttonClass(
+  variant: keyof typeof variants = "solid",
+  size: keyof typeof sizes = "md",
+  className = "",
+) {
+  return `${base} ${variants[variant]} ${sizes[size]} ${className}`;
+}
+
 type ButtonProps = {
   variant?: keyof typeof variants;
   size?: keyof typeof sizes;
@@ -82,31 +91,6 @@ export function ButtonLink({
   );
 }
 
-/**
- * Same styling as ButtonLink, but a plain <a> rather than next/link.
- *
- * A hash-only href through next/link is treated as a route navigation under
- * the app router and frequently does not scroll to the fragment at all. For a
- * target on the page you are already on, the browser's own anchor handling is
- * simpler and reliable, and it picks up the smooth scrolling and
- * scroll-padding already set on the root element.
- */
-export function ButtonAnchor({
-  variant = "solid",
-  size = "md",
-  className = "",
-  children,
-  ...rest
-}: ButtonProps & Omit<ComponentProps<"a">, "children">) {
-  return (
-    <a
-      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...rest}
-    >
-      {children}
-    </a>
-  );
-}
 
 
 /* ------------------------------------------------------------------ */

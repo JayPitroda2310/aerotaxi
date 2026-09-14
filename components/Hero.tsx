@@ -3,7 +3,8 @@ import plane from "@/public/plane.png";
 import Booker from "./Booker";
 import { LAUNCH } from "./network";
 import Reveal from "./Reveal";
-import { ButtonAnchor, EyebrowLine, Hl } from "./ui";
+import { AnchorButton, AnchorLink } from "./AnchorLink";
+import { EyebrowLine, Hl } from "./ui";
 
 /* The headline facts, set as a labelled data strip rather than loose prose —
    the flight-information idiom this whole page borrows from. Deliberately no
@@ -66,11 +67,11 @@ export default function Hero() {
                 few hundred pixels below, so a plain fragment scrolls to it
                 natively — no handler needed. */}
             <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-              <ButtonAnchor href="#book" size="md">
+              <AnchorButton href="#book" size="md">
                 Book now
-              </ButtonAnchor>
+              </AnchorButton>
 
-              <a
+              <AnchorLink
                 href="#routes"
                 className="inline-flex items-center gap-2 border-b border-accent/30 pb-0.5 text-sm font-semibold text-accent transition-colors duration-250 hover:border-accent"
               >
@@ -88,7 +89,7 @@ export default function Hero() {
                 >
                   <path d="M8 2.5v11M3.5 9.5 8 14l4.5-4.5" />
                 </svg>
-              </a>
+              </AnchorLink>
             </div>
           </Reveal>
 

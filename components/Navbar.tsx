@@ -17,7 +17,6 @@ type NavItem = {
 const SOON = "/#footer";
 
 const LINKS: NavItem[] = [
-  { label: "Home", href: "/" },
   {
     label: "About Us",
     items: [

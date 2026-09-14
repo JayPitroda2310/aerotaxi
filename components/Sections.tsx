@@ -10,7 +10,8 @@ import {
   project,
   SPOKES,
 } from "./network";
-import { ButtonAnchor, ButtonLink, Eyebrow, EyebrowLine, Hl } from "./ui";
+import { AnchorButton } from "./AnchorLink";
+import { ButtonLink, Eyebrow, EyebrowLine, Hl } from "./ui";
 
 /* ================================================================== */
 /* Features                                                            */
@@ -156,9 +157,9 @@ export function Routes() {
             <strong className="text-head">in both directions</strong>
           </span>
           <span aria-hidden className="size-1 rounded-full bg-fog-2 max-sm:hidden" />
-          <ButtonAnchor href="#book" size="sm">
+          <AnchorButton href="#book" size="sm">
             Check seats &amp; dates
-          </ButtonAnchor>
+          </AnchorButton>
         </Reveal>
       </div>
     </section>
