@@ -232,21 +232,42 @@ export default function Booker() {
       >
         {/* trip type + launch note */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-hair px-1 pb-3.5">
-          <div className="flex flex-wrap gap-1">
+          {/*
+            Two presentations of one control. On a wide bar the pair sits as
+            radios, which is what the rest of the row reads as. On a phone the
+            row is full width and two radios leave a lot of dead space, so the
+            same buttons become a segmented track: the dots drop away, the
+            halves split the width, and a thumb slides under the live one.
+            Nothing is duplicated — only the skin changes at the breakpoint.
+          */}
+          <div className="relative flex flex-wrap gap-1 max-md:w-full max-md:flex-nowrap max-md:gap-0 max-md:rounded-full max-md:border max-md:border-hair max-md:bg-tint max-md:p-1">
+            {/*
+              The sliding thumb, mobile only. The track is padded by 4px, so
+              each half is (100% - 8px) / 2 = 50% - 4px wide, and translating
+              the thumb by its own width lands it exactly on the second half.
+            */}
+            <span
+              aria-hidden
+              className={`pointer-events-none absolute top-1 bottom-1 left-1 hidden w-[calc(50%-0.25rem)] rounded-full bg-panel shadow-[0_2px_8px_-3px_rgb(13_27_42/0.25)] transition-transform duration-300 ease-out-soft max-md:block ${
+                trip === "Round Trip" ? "translate-x-full" : "translate-x-0"
+              }`}
+            />
+
             {TRIPS.map((t) => {
               const on = trip === t;
               return (
                 <button
                   key={t}
                   onClick={() => setTrip(t)}
-                  className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-all duration-250 ${
+                  aria-pressed={on}
+                  className={`relative z-1 inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-all duration-250 max-md:flex-1 max-md:justify-center max-md:border-transparent max-md:bg-transparent max-md:py-1.5 ${
                     on
                       ? "border-accent/30 bg-accent/10 text-accent"
                       : "border-transparent text-fog hover:text-head"
                   }`}
                 >
                   <span
-                    className={`size-3 rounded-full border-[1.5px] transition-all duration-250 ${
+                    className={`size-3 rounded-full border-[1.5px] transition-all duration-250 max-md:hidden ${
                       on
                         ? "border-accent bg-accent shadow-[inset_0_0_0_2.5px_#0d1b2a]"
                         : "border-[#b9c6d4]"
@@ -276,7 +297,12 @@ export default function Booker() {
 
                 Both shafts span 5 to 19, so they share the box's centre line;
                 the earlier pair sat on centres of 10.5 and 13.5, which read as
-                lopsided however carefully the rest was drawn. */}
+                lopsided however carefully the rest was drawn.
+
+                The shafts sit 8 apart rather than 6: at 6 the arrowheads
+                reached past the centre line into each other's half and the
+                pair read as one crowded mark. At 8 there is a clear unit of
+                daylight between the two shapes. */}
             <button
               type="button"
               onClick={swap}
@@ -294,8 +320,8 @@ export default function Booker() {
                 strokeLinejoin="round"
                 aria-hidden="true"
               >
-                <path d="M5 9H19M15.5 5.5L19 9L15.5 12.5" />
-                <path d="M19 15H5M8.5 11.5L5 15L8.5 18.5" />
+                <path d="M5 8H19M15.5 4.5L19 8L15.5 11.5" />
+                <path d="M19 16H5M8.5 12.5L5 16L8.5 19.5" />
               </svg>
             </button>
           </div>

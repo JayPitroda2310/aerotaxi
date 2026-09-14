@@ -234,7 +234,7 @@ export default function Navbar() {
         <Logo />
 
         <nav
-          className={`ml-auto flex items-center gap-1 max-lg:fixed max-lg:inset-x-3.5 max-lg:top-[86px] max-lg:max-h-[calc(100dvh-108px)] max-lg:flex-col max-lg:items-stretch max-lg:gap-0.5 max-lg:overflow-y-auto max-lg:rounded-[20px] max-lg:border max-lg:border-accent/15 max-lg:bg-ink-2/97 max-lg:p-3.5 max-lg:shadow-[0_30px_60px_-22px_rgb(13_27_42/0.17)] max-lg:backdrop-blur-xl max-lg:transition-all max-lg:duration-300 ${
+          className={`ml-auto flex items-center gap-1 max-lg:fixed max-lg:inset-x-3.5 max-lg:top-[86px] max-lg:max-h-[calc(100dvh-108px)] max-lg:flex-col max-lg:items-stretch max-lg:gap-0.5 max-lg:overflow-y-auto max-lg:rounded-[20px] max-lg:border max-lg:border-accent/15 max-lg:bg-ink-2 max-lg:p-3.5 max-lg:shadow-[0_30px_60px_-22px_rgb(13_27_42/0.17)] max-lg:transition-all max-lg:duration-300 ${
             open
               ? "max-lg:visible max-lg:translate-y-0 max-lg:opacity-100"
               : "max-lg:invisible max-lg:-translate-y-3 max-lg:opacity-0"
