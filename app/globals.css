@@ -54,6 +54,13 @@
      * scroll away with the page. On the root neither problem arises.
      */
     overflow-x: clip;
+    /*
+     * overflow-x stops the page being scrollable sideways, but it does not
+     * stop the sideways rubber-band: a horizontal swipe can still drag the
+     * whole page and expose blank canvas past the right edge before it
+     * springs back. That is the white strip. This pins the x axis.
+     */
+    overscroll-behavior-x: none;
     scroll-behavior: smooth;
     scroll-padding-top: 6rem;
     color-scheme: light;
