@@ -44,16 +44,21 @@
 @layer base {
   html {
     /*
-     * Sideways overflow is clipped on the root, not on body.
+     * Sideways overflow is clipped on the root, not on body, and with
+     * "hidden" rather than "clip".
      *
-     * "hidden" would make its element a scroll container and silently break
-     * position:sticky further down the page. "clip" never does that, but on
-     * body it depends on overflow propagating to the viewport, which browsers
-     * have been inconsistent about for clip. Where it does not propagate, body
-     * becomes a containing block and position:fixed children — the navbar —
-     * scroll away with the page. On the root neither problem arises.
+     * Overflow set on the root is propagated to the viewport, and the root's
+     * own used value then becomes "visible" — so this does NOT turn html into
+     * a scroll container, and position:sticky below it is unaffected. That is
+     * only a hazard when the rule sits on body or another ancestor.
+     *
+     * "clip" reads as the tidier choice but is not propagated by WebKit, so
+     * on iOS — where every browser is WebKit — it left the page scrollable
+     * sideways while desktop Chrome looked clean. "hidden" propagates
+     * everywhere. Belt and braces only: nothing on the page should be
+     * overflowing in the first place.
      */
-    overflow-x: clip;
+    overflow-x: hidden;
     /*
      * overflow-x stops the page being scrollable sideways, but it does not
      * stop the sideways rubber-band: a horizontal swipe can still drag the

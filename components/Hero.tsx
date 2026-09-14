@@ -95,10 +95,18 @@ export default function Hero() {
 
           {/* ---------- plane ---------- */}
           <Reveal delay={0.1} className="relative grid place-items-center max-lg:order-2">
+            {/* Ambient glow. It is deliberately wider than the column — the
+                gradient has faded to nothing well before its own box edge, so
+                a box that only spans the column would cut the glow short. The
+                wrapper clips it back to the column, at a radius where the
+                alpha is already under 1%, so the cut is invisible and the
+                circle can no longer push the page sideways. */}
             <div
               aria-hidden
-              className="absolute aspect-square w-[120%] rounded-full bg-[radial-gradient(circle,rgb(58_160_238/0.18),transparent_62%)] blur-[18px]"
-            />
+              className="pointer-events-none absolute inset-0 overflow-hidden"
+            >
+              <div className="absolute top-1/2 left-1/2 aspect-square w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(58_160_238/0.18),transparent_62%)] blur-[18px]" />
+            </div>
             <div className="relative">
               <Image
                 src={plane}
