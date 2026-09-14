@@ -777,10 +777,10 @@ export function Footer({ logo }: { logo: React.ReactNode }) {
       </div>
 
       {/* ---------- oversized wordmark ---------- */}
-      {/* The same px-6 gutter the rest of the page uses, so the word stops
-          short of the screen edges instead of running into them. It still
-          reads as full-bleed against the 1240-wide content above it. */}
-      <div aria-hidden className="overflow-hidden px-6">
+      {/* A narrow gutter — half the page's px-6 — so the word clears the
+          screen edges without losing its full-bleed weight against the
+          1240-wide content above it. */}
+      <div aria-hidden className="overflow-hidden px-3">
         <svg
           viewBox="0 0 1000 126"
           preserveAspectRatio="xMidYMax meet"
