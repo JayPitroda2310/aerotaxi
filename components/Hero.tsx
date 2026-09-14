@@ -29,11 +29,17 @@ export default function Hero() {
       </div>
 
       <div className="relative mx-auto w-full max-w-[1240px] px-6">
-        <div className="grid min-h-[600px] grid-cols-[1.05fr_minmax(340px,0.95fr)] items-center gap-5 max-lg:min-h-0 max-lg:grid-cols-1 max-lg:gap-9">
+        {/* max-lg:contents dissolves this box on phones. A sticky grid item
+            is constrained to its own grid area and so cannot travel at all;
+            with no box here the copy, the aircraft and the booking bar become
+            children of the wrapper above, which is then the sticky containing
+            block and spans the whole hero. The gap goes with the box, so the
+            aircraft carries its own margin below. */}
+        <div className="grid min-h-[600px] grid-cols-[1.05fr_minmax(340px,0.95fr)] items-center gap-5 max-lg:contents">
           {/* ---------- copy ---------- */}
-          {/* On a phone this drifts down and fades as the page scrolls, so
-              the aircraft below rises over it. See HeroRecede. */}
-          <HeroRecede className="max-lg:order-1">
+          {/* On a phone this is pinned and everything below scrolls up over
+              it, fading it as it goes. See HeroRecede. */}
+          <HeroRecede className="max-lg:sticky max-lg:top-26">
             <Reveal>
               {/* a rule and a letterspaced label, rather than a pill badge */}
               <p className="mb-7 text-[11px] leading-none font-semibold tracking-[0.22em] text-accent uppercase">
@@ -115,9 +121,9 @@ export default function Hero() {
 
           {/* ---------- plane ---------- */}
           {/* z-1 on the stacked layout only, so the aircraft paints over the
-              receding copy. Kept below the booking bar's z-5 so its dropdowns
-              are never covered. */}
-          <div className="relative max-lg:order-2 max-lg:z-1">
+              pinned copy rather than under it. Kept below the booking bar's
+              z-5 so its dropdowns are never covered. */}
+          <div className="relative max-lg:z-1 max-lg:mt-9">
             <Reveal delay={0.1} className="relative grid place-items-center">
               {/* Ambient glow. It is deliberately wider than the column — the
                 gradient has faded to nothing well before its own box edge, so

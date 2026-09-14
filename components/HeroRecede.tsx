@@ -4,38 +4,46 @@ import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 /**
- * Lets the hero copy fall away under the aircraft as the page scrolls.
+ * Holds the hero copy still while the rest of the page scrolls up over it.
  *
- * On a phone the hero stacks: copy first, aircraft below it. Scrolling
- * drifts the copy downwards at less than scroll speed and fades it out, so
- * the aircraft — which moves at full speed and paints above — rises over the
- * top of it rather than simply following it up the page.
+ * On a phone the hero stacks: copy first, aircraft below it. The copy is
+ * pinned with position:sticky — that part is plain CSS, applied through
+ * className so it can be scoped to the stacked layout — and everything from
+ * the aircraft down scrolls over the top of it.
  *
- * It wraps Reveal rather than being folded into it: Reveal owns y and opacity
- * for its entrance, and two things writing the same transform would fight.
- * This is the outer element and the grid item; Reveal sits inside it.
+ * What this component adds is the fade. The aircraft is a PNG with a
+ * transparent surround, so without one the pinned copy would read straight
+ * through it. Painting an opaque backdrop on the aircraft instead would solve
+ * the same problem, but it would also lay a flat rectangle over the hero's
+ * ambient glow, so the copy fades as it is covered.
  *
- * Wide layouts are left alone — there the two sit side by side, so there is
- * nothing to pass over — as is a reduced-motion preference. Neither applies
- * any style at all, and the server render matches the first client render
- * because the match starts false.
+ * The fade is driven off the page scroll rather than off this element's own
+ * position, which is the part worth knowing: once the element is pinned it no
+ * longer moves relative to the viewport, so a useScroll keyed to it would
+ * freeze at whatever progress it had when it stuck. Page scroll keeps
+ * advancing. The distance is this block's own height, measured rather than
+ * guessed, so the copy has faded out about when the aircraft has swept up
+ * across it.
+ *
+ * Wide layouts are left alone — there the two sit side by side, so nothing
+ * passes over anything — as is a reduced-motion preference. Neither applies
+ * any style, and the media match starts false so the server render and the
+ * first client render agree.
  */
 export default function HeroRecede({
   children,
   className,
-  shift = 92,
 }: {
   children: ReactNode;
   className?: string;
-  /** how far the copy drifts down, in px, across its own height of scrolling */
-  shift?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const [stacked, setStacked] = useState(false);
+  const [range, setRange] = useState(1);
 
   useEffect(() => {
-    // lg — the breakpoint the hero grid itself collapses at
+    // lg — the breakpoint the hero stops stacking at
     const mq = window.matchMedia("(max-width: 63.9375rem)");
     const sync = () => setStacked(mq.matches);
     sync();
@@ -43,22 +51,21 @@ export default function HeroRecede({
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  // 0 while the block sits below the top of the viewport, 1 once it has
-  // travelled its own height past it
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = () => setRange(Math.max(el.offsetHeight, 1));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, shift]);
-  // Runs the whole travel rather than finishing early. An opaque backdrop on
-  // the aircraft would occlude the copy outright and make a fade unnecessary,
-  // but it would also paint a flat rectangle over the hero's ambient glow —
-  // so the copy has to actually fade, and it should not hit zero while the
-  // call-to-action row is still sitting in the middle of the screen.
-  const opacity = useTransform(scrollYProgress, [0, 0.9], [1, 0]);
-  // once it has faded there is nothing to tap, and the links underneath it
-  // should not answer either
+  const { scrollY } = useScroll();
+
+  // solid for the first stretch, so it reads as held rather than as already
+  // going, then out across the remainder
+  const opacity = useTransform(scrollY, [0, range * 0.18, range], [1, 1, 0]);
   const pointerEvents = useTransform(opacity, (v) =>
     v < 0.08 ? ("none" as const) : ("auto" as const),
   );
@@ -69,7 +76,7 @@ export default function HeroRecede({
     <motion.div
       ref={ref}
       className={className}
-      style={active ? { y, opacity, pointerEvents } : undefined}
+      style={active ? { opacity, pointerEvents } : undefined}
     >
       {children}
     </motion.div>
