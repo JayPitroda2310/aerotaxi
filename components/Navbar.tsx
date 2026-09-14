@@ -256,7 +256,7 @@ export default function Navbar() {
       className="fixed inset-x-0 top-4 z-90 px-4 max-lg:top-3"
     >
       <div
-        className={`mx-auto flex w-full max-w-[1240px] items-center gap-5 rounded-2xl border px-5 py-2.5 transition-[background,border-color,box-shadow] duration-350 ${
+        className={`mx-auto flex w-full max-w-[1240px] items-center gap-5 rounded-2xl border px-5 py-2.5 transition-[background,border-color,box-shadow] duration-350 max-lg:gap-2 ${
           stuck
             ? "border-hair bg-ink/80 shadow-[0_18px_44px_-20px_rgb(13_27_42/0.17)] backdrop-blur-xl backdrop-saturate-150"
             : "border-accent/14 bg-ink/45 shadow-[0_10px_34px_-24px_rgb(13_27_42/0.15)] backdrop-blur-md"
