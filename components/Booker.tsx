@@ -238,6 +238,14 @@ export default function Booker() {
             row is full width and two radios leave a lot of dead space, so the
             same buttons become a segmented track: the dots drop away, the
             halves split the width, and a blue thumb slides under the live one.
+
+            The thumb is the deeper route blue rather than the accent: the
+            label on it is white, and white on the accent is 2.82:1 — dropping
+            the accent's opacity to soften it only drives that down further
+            (1.80:1 at half). Deepening instead calms the colour and takes the
+            label to 5.07:1. Pinned to a literal rather than var(--color-route)
+            because that token flips bright in the dark theme, where white on
+            it would fall back to 2.18:1.
             Nothing is duplicated — only the skin changes at the breakpoint.
           */}
           <div className="relative flex flex-wrap gap-1 max-md:w-full max-md:flex-nowrap max-md:gap-0 max-md:rounded-xl max-md:border max-md:border-hair max-md:bg-tint max-md:p-1">
@@ -248,7 +256,7 @@ export default function Booker() {
             */}
             <span
               aria-hidden
-              className={`pointer-events-none absolute top-1 bottom-1 left-1 hidden w-[calc(50%-0.25rem)] rounded-lg bg-accent shadow-[0_3px_10px_-3px_rgb(58_160_238/0.6)] transition-transform duration-300 ease-out-soft max-md:block ${
+              className={`pointer-events-none absolute top-1 bottom-1 left-1 hidden w-[calc(50%-0.25rem)] rounded-lg bg-[#1b72b8] shadow-[0_2px_6px_-2px_rgb(27_114_184/0.45)] transition-transform duration-300 ease-out-soft max-md:block ${
                 trip === "Round Trip" ? "translate-x-full" : "translate-x-0"
               }`}
             />
@@ -262,7 +270,7 @@ export default function Booker() {
                   aria-pressed={on}
                   className={`relative z-1 inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-all duration-250 max-md:flex-1 max-md:justify-center max-md:rounded-lg max-md:border-transparent max-md:bg-transparent max-md:py-1.5 ${
                     on
-                      ? "border-accent/30 bg-accent/10 text-accent max-md:text-[#0d1b2a]"
+                      ? "border-accent/30 bg-accent/10 text-accent max-md:text-white"
                       : "border-transparent text-fog hover:text-head"
                   }`}
                 >
