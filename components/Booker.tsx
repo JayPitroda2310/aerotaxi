@@ -269,13 +269,34 @@ export default function Booker() {
           />
 
           <div className="flex items-center justify-center">
+            {/* Drawn rather than the "⇄" character, which fell back to
+                whatever each platform had and came out at a different weight
+                from everything around it. The two arrows are 180° rotationally
+                symmetric, so the spin on hover reads as the swap itself.
+
+                Both shafts span 5 to 19, so they share the box's centre line;
+                the earlier pair sat on centres of 10.5 and 13.5, which read as
+                lopsided however carefully the rest was drawn. */}
             <button
               type="button"
               onClick={swap}
               aria-label="Swap departure and arrival"
-              className="size-8 shrink-0 cursor-pointer rounded-full border border-accent/15 bg-panel-2 text-[13px] text-accent transition-[transform,background] duration-400 hover:rotate-180 hover:bg-accent/15 max-md:rotate-90 max-md:hover:rotate-270"
+              className="grid size-8 shrink-0 cursor-pointer place-items-center rounded-full border border-accent/20 bg-panel-2 text-accent transition-[transform,background,border-color] duration-400 hover:rotate-180 hover:border-accent/45 hover:bg-accent/12 max-md:rotate-90 max-md:hover:rotate-270"
             >
-              ⇄
+              <svg
+                viewBox="0 0 24 24"
+                width="15"
+                height="15"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 9H19M15.5 5.5L19 9L15.5 12.5" />
+                <path d="M19 15H5M8.5 11.5L5 15L8.5 18.5" />
+              </svg>
             </button>
           </div>
 

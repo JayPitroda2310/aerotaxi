@@ -45,11 +45,11 @@ export default function Hero() {
             </p>
 
             {/* the launch date and the shape of the network, as data */}
-            <dl className="mt-10 grid max-w-[540px] grid-cols-3 border-y border-hair max-lg:max-w-none">
+            <dl className="mt-10 grid max-w-[540px] grid-cols-3 border-y border-hair max-lg:max-w-none max-sm:grid-cols-1">
               {FACTS.map((f) => (
                 <div
                   key={f.label}
-                  className="border-l border-hair py-4 pl-5 first:border-l-0 first:pl-0 max-sm:pl-3.5"
+                  className="border-l border-hair py-4 pl-5 first:border-l-0 first:pl-0 max-sm:border-t max-sm:border-l-0 max-sm:py-3.5 max-sm:pl-0 max-sm:first:border-t-0"
                 >
                   <dt className="text-[10px] font-semibold tracking-[0.18em] text-fog-2 uppercase">
                     {f.label}
