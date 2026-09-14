@@ -45,17 +45,21 @@ export default function Hero() {
               to an international terminal first.
             </p>
 
-            {/* the launch date and the shape of the network, as data */}
-            <dl className="mt-10 grid max-w-[540px] grid-cols-3 border-y border-hair max-lg:max-w-none max-sm:grid-cols-1">
+            {/* The launch date and the shape of the network, as data.
+                Dropped on a phone: three columns will not fit, and stacking
+                them turned a compact strip into a tall block that pushed the
+                booking bar well below the fold. The same facts are on the
+                About page, which has the room for them. */}
+            <dl className="mt-10 grid max-w-[540px] grid-cols-3 border-y border-hair max-lg:max-w-none max-sm:hidden">
               {FACTS.map((f) => (
                 <div
                   key={f.label}
-                  className="border-l border-hair py-4 pl-5 first:border-l-0 first:pl-0 max-sm:border-t max-sm:border-l-0 max-sm:py-3.5 max-sm:pl-0 max-sm:first:border-t-0"
+                  className="border-l border-hair py-4 pl-5 first:border-l-0 first:pl-0"
                 >
                   <dt className="text-[10px] font-semibold tracking-[0.18em] text-fog-2 uppercase">
                     {f.label}
                   </dt>
-                  <dd className="mt-2 font-display text-[17px] tracking-[-0.02em] tabular-nums max-sm:text-[15px]">
+                  <dd className="mt-2 font-display text-[17px] tracking-[-0.02em] tabular-nums">
                     {f.value}
                   </dd>
                   <dd className="mt-0.5 text-[12px] text-fog">{f.note}</dd>
