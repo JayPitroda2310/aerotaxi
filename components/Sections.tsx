@@ -156,7 +156,10 @@ export function Routes() {
             All four routes operate{" "}
             <strong className="text-head">in both directions</strong>
           </span>
-          <span aria-hidden className="size-1 rounded-full bg-fog-2 max-sm:hidden" />
+          <span
+            aria-hidden
+            className="size-1 rounded-full bg-fog-2 max-sm:hidden"
+          />
           <AnchorButton href="#book" size="sm">
             Check seats &amp; dates
           </AnchorButton>
@@ -180,205 +183,165 @@ function NetworkMap() {
 
   return (
     <div className="relative mx-auto w-full max-w-[880px]">
-      {/* ---------- map (md and up) ---------- */}
-      <div className="relative max-md:hidden">
-        <span
-          aria-hidden
-          className="absolute top-1/2 left-1/2 aspect-square w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(58_160_238/0.13),transparent_67%)] blur-[22px]"
+      <span
+        aria-hidden
+        className="absolute top-1/2 left-1/2 aspect-square w-[62%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(58_160_238/0.13),transparent_67%)] blur-[22px]"
+      />
+      <svg
+        viewBox={`0 0 ${MAP.w} ${MAP.h}`}
+        className="relative block h-auto w-full"
+        role="img"
+        aria-label="Map of Gujarat showing flights between Mundra and Jamnagar, Rajkot, Vadodara and Diu."
+      >
+        <defs>
+          <linearGradient id="land" x1="0" y1="0" x2="0.35" y2="1">
+            <stop
+              offset="0%"
+              stopColor="var(--color-accent)"
+              stopOpacity="0.1"
+            />
+            <stop
+              offset="100%"
+              stopColor="var(--color-accent)"
+              stopOpacity="0.03"
+            />
+          </linearGradient>
+        </defs>
+
+        {/* landmass */}
+        <path
+          d={GUJARAT_PATH}
+          fill="url(#land)"
+          stroke="var(--color-route)"
+          strokeOpacity="0.4"
+          strokeWidth="1.6"
+          strokeLinejoin="round"
         />
-        <svg
-          viewBox={`0 0 ${MAP.w} ${MAP.h}`}
-          className="relative block h-auto w-full"
-          role="img"
-          aria-label="Map of Gujarat showing flights between Mundra and Jamnagar, Rajkot, Vadodara and Diu."
-        >
-          <defs>
-            <linearGradient id="land" x1="0" y1="0" x2="0.35" y2="1">
-              <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.1" />
-              <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0.03" />
-            </linearGradient>
-          </defs>
 
-          {/* landmass */}
-          <path
-            d={GUJARAT_PATH}
-            fill="url(#land)"
-            stroke="var(--color-route)"
-            strokeOpacity="0.4"
-            strokeWidth="1.6"
-            strokeLinejoin="round"
-          />
+        {/* the four legs: a faint corridor, plus a plane working it */}
+        {FLIGHTS.map((leg) => (
+          <g key={leg.key}>
+            <path
+              d={leg.d}
+              fill="none"
+              stroke="var(--color-route)"
+              strokeOpacity="0.28"
+              strokeWidth="1.4"
+              strokeDasharray="1 7"
+              strokeLinecap="round"
+            />
 
-          {/* the four legs: a faint corridor, plus a plane working it */}
-          {FLIGHTS.map((leg) => (
-            <g key={leg.key}>
+            {/* planes are decoration — stood down when motion is unwelcome */}
+            <g className="in-flight">
+              {/* contrail: a length of line that travels with the aircraft */}
               <path
                 d={leg.d}
+                pathLength="100"
                 fill="none"
                 stroke="var(--color-route)"
-                strokeOpacity="0.28"
-                strokeWidth="1.4"
-                strokeDasharray="1 7"
+                strokeOpacity="0.9"
+                strokeWidth="1.9"
                 strokeLinecap="round"
-              />
-
-              {/* planes are decoration — stood down when motion is unwelcome */}
-              <g className="in-flight">
-                {/* contrail: a length of line that travels with the aircraft */}
-                <path
-                  d={leg.d}
-                  pathLength="100"
-                  fill="none"
-                  stroke="var(--color-route)"
-                  strokeOpacity="0.9"
-                  strokeWidth="1.9"
-                  strokeLinecap="round"
-                  strokeDasharray="26 100"
-                >
-                  {/*
+                strokeDasharray="26 100"
+              >
+                {/*
                     The dash head is pinned to the landing point while its
                     length is animated to nothing, so the trail is reeled into
                     the destination rather than fading out on the spot.
                   */}
-                  <animate
-                    attributeName="stroke-dashoffset"
-                    values="26;26;-74;-100;-100"
-                    keyTimes={leg.trailTimes}
-                    calcMode="spline"
-                    keySplines={leg.trailSplines}
-                    dur={leg.dur}
-                    begin={leg.begin}
-                    repeatCount="indefinite"
-                  />
-                  <animate
-                    attributeName="stroke-dasharray"
-                    values="26 100;26 100;26 100;0 100;0 100"
-                    keyTimes={leg.trailTimes}
-                    calcMode="spline"
-                    keySplines={leg.trailSplines}
-                    dur={leg.dur}
-                    begin={leg.begin}
-                    repeatCount="indefinite"
-                  />
-                </path>
-
-                <g>
-                  <path
-                    d={PLANE_PATH}
-                    transform="scale(0.5)"
-                    fill="var(--color-route)"
-                    stroke="var(--color-ink)"
-                    strokeWidth="1.6"
-                    strokeLinejoin="round"
-                    paintOrder="stroke"
-                  />
-                  {/* rotate="auto" banks the airframe into the curve */}
-                  <animateMotion
-                    path={leg.d}
-                    rotate="auto"
-                    keyPoints="0;0;1;1"
-                    keyTimes={leg.keyTimes}
-                    calcMode="spline"
-                    keySplines={leg.keySplines}
-                    dur={leg.dur}
-                    begin={leg.begin}
-                    repeatCount="indefinite"
-                  />
-                  <animate
-                    attributeName="opacity"
-                    values="0;0;1;1;0;0"
-                    keyTimes={leg.fadeTimes}
-                    dur={leg.dur}
-                    begin={leg.begin}
-                    repeatCount="indefinite"
-                  />
-                </g>
-              </g>
-            </g>
-          ))}
-
-          {/* airfields — every one carries the same weight */}
-          {places.map((p) => {
-            const [x, y] = project(p.lon, p.lat);
-            const l = LABEL[p.label];
-            return (
-              <g key={p.city}>
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="11"
-                  fill="var(--color-route)"
-                  fillOpacity="0.15"
+                <animate
+                  attributeName="stroke-dashoffset"
+                  values="26;26;-74;-100;-100"
+                  keyTimes={leg.trailTimes}
+                  calcMode="spline"
+                  keySplines={leg.trailSplines}
+                  dur={leg.dur}
+                  begin={leg.begin}
+                  repeatCount="indefinite"
                 />
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="5"
+                <animate
+                  attributeName="stroke-dasharray"
+                  values="26 100;26 100;26 100;0 100;0 100"
+                  keyTimes={leg.trailTimes}
+                  calcMode="spline"
+                  keySplines={leg.trailSplines}
+                  dur={leg.dur}
+                  begin={leg.begin}
+                  repeatCount="indefinite"
+                />
+              </path>
+
+              <g>
+                <path
+                  d={PLANE_PATH}
+                  transform="scale(0.5)"
                   fill="var(--color-route)"
                   stroke="var(--color-ink)"
-                  strokeWidth="2"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                  paintOrder="stroke"
                 />
-                <text
-                  x={x + l.dx}
-                  y={y + l.dy}
-                  textAnchor={l.anchor}
-                  className="fill-head font-display"
-                  fontSize="16"
-                  fontWeight="500"
-                  letterSpacing="-0.01em"
-                >
-                  {p.city}
-                </text>
+                {/* rotate="auto" banks the airframe into the curve */}
+                <animateMotion
+                  path={leg.d}
+                  rotate="auto"
+                  keyPoints="0;0;1;1"
+                  keyTimes={leg.keyTimes}
+                  calcMode="spline"
+                  keySplines={leg.keySplines}
+                  dur={leg.dur}
+                  begin={leg.begin}
+                  repeatCount="indefinite"
+                />
+                <animate
+                  attributeName="opacity"
+                  values="0;0;1;1;0;0"
+                  keyTimes={leg.fadeTimes}
+                  dur={leg.dur}
+                  begin={leg.begin}
+                  repeatCount="indefinite"
+                />
               </g>
-            );
-          })}
-        </svg>
-      </div>
-
-      {/* ---------- stacked fallback (below md) ---------- */}
-      <ul className="hidden gap-3 max-md:grid">
-        {SPOKES.map((d) => (
-          <li
-            key={d.city}
-            className="rounded-2xl border border-hair bg-linear-[135deg,var(--color-panel),var(--color-ink-2)] px-4 pt-4 pb-3 transition-colors duration-300 hover:border-accent/40"
-          >
-            {/* the two ends, with the leg drawn between them */}
-            <div className="flex items-center gap-2">
-              <b className="font-display text-[15.5px] leading-none tracking-[-0.02em]">
-                {MUNDRA.city}
-              </b>
-
-              <span
-                aria-hidden
-                className="flex min-w-10 flex-1 items-center gap-1"
-              >
-                <i className="size-1.5 shrink-0 rounded-full bg-accent" />
-                <i className="dashed-route h-px flex-1" />
-                <svg
-                  viewBox="-14 -9 28 18"
-                  className="size-3.5 shrink-0 fill-accent"
-                >
-                  <path d={PLANE_PATH} />
-                </svg>
-                <i className="dashed-route h-px flex-1" />
-                <i className="size-1.5 shrink-0 rounded-full bg-accent" />
-              </span>
-
-              <b className="font-display text-[15.5px] leading-none tracking-[-0.02em]">
-                {d.city}
-              </b>
-            </div>
-
-            {/* region on one side, how it runs on the other */}
-            <div className="mt-3 flex items-center justify-between gap-3 border-t border-hair pt-2.5">
-              <span className="truncate text-[11.5px] text-fog">{d.region}</span>
-              <span className="shrink-0 text-[10px] font-semibold tracking-[0.16em] text-fog-2 uppercase">
-                Both ways
-              </span>
-            </div>
-          </li>
+            </g>
+          </g>
         ))}
-      </ul>
+
+        {/* airfields — every one carries the same weight */}
+        {places.map((p) => {
+          const [x, y] = project(p.lon, p.lat);
+          const l = LABEL[p.label];
+          return (
+            <g key={p.city}>
+              <circle
+                cx={x}
+                cy={y}
+                r="11"
+                fill="var(--color-route)"
+                fillOpacity="0.15"
+              />
+              <circle
+                cx={x}
+                cy={y}
+                r="5"
+                fill="var(--color-route)"
+                stroke="var(--color-ink)"
+                strokeWidth="2"
+              />
+              <text
+                x={x + l.dx}
+                y={y + l.dy}
+                textAnchor={l.anchor}
+                className="fill-head font-display max-md:text-[21px]"
+                fontSize="16"
+                fontWeight="500"
+                letterSpacing="-0.01em"
+              >
+                {p.city}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }
@@ -491,7 +454,10 @@ export function Reviews() {
           {REVIEWS.map((r, i) => (
             <Reveal key={r.name} delay={i * 0.1} className="h-full">
               <figure className="flex h-full flex-col rounded-[26px] border border-hair bg-linear-[170deg,var(--color-panel),var(--color-ink-2)] px-7 py-7.5 transition-[transform,border-color] duration-350 hover:-translate-y-1.5 hover:border-accent/30">
-                <div className="mb-4 text-sm tracking-[2px] text-accent" aria-hidden>
+                <div
+                  className="mb-4 text-sm tracking-[2px] text-accent"
+                  aria-hidden
+                >
                   ★★★★★
                 </div>
                 <blockquote className="mb-6 text-[15.5px] leading-[1.72] text-body">
@@ -640,19 +606,19 @@ export function Founders() {
               <article className="grid grid-cols-[minmax(0,320px)_minmax(0,1fr)] items-start gap-12 max-lg:grid-cols-1 max-lg:gap-8">
                 {/* portrait */}
                 <div className="relative grid aspect-[4/5] place-items-center overflow-hidden rounded-[22px] border border-hair bg-linear-[160deg,var(--color-panel),var(--color-ink-2)] max-lg:aspect-[3/2]">
-                    {f.photo ? (
-                      <Image
-                        src={f.photo}
-                        alt={f.name}
-                        fill
-                        sizes="(max-width: 1024px) 90vw, 320px"
-                        className="object-cover"
-                      />
-                    ) : (
-                      <span className="font-display text-[72px] leading-none font-extrabold tracking-[-0.04em] text-accent/22">
-                        {f.initials}
-                      </span>
-                    )}
+                  {f.photo ? (
+                    <Image
+                      src={f.photo}
+                      alt={f.name}
+                      fill
+                      sizes="(max-width: 1024px) 90vw, 320px"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <span className="font-display text-[72px] leading-none font-extrabold tracking-[-0.04em] text-accent/22">
+                      {f.initials}
+                    </span>
+                  )}
                 </div>
 
                 {/* the person */}
@@ -663,7 +629,10 @@ export function Founders() {
                   <p className="mt-2 text-[12px] font-semibold tracking-[0.2em] text-accent uppercase">
                     {f.role}
                   </p>
-                  <span aria-hidden className="mt-5 block h-0.5 w-11 bg-accent" />
+                  <span
+                    aria-hidden
+                    className="mt-5 block h-0.5 w-11 bg-accent"
+                  />
 
                   <div className="mt-6 grid max-w-[68ch] gap-4 text-[15.5px] leading-relaxed text-fog">
                     {f.bio.map((para) => (
@@ -727,7 +696,10 @@ const FOOTER_COLS = [
 
 export function Footer({ logo }: { logo: React.ReactNode }) {
   return (
-    <footer id="footer" className="relative border-t border-hair bg-ink-2 pt-16">
+    <footer
+      id="footer"
+      className="relative border-t border-hair bg-ink-2 pt-16"
+    >
       <div className="mx-auto grid w-full max-w-[1240px] grid-cols-[1.7fr_1fr_1fr_1fr] gap-9 px-6 pb-12 max-xl:grid-cols-2 max-sm:grid-cols-2 max-sm:gap-x-5 max-sm:gap-y-8">
         <div className="max-sm:col-span-2">
           {logo}
@@ -743,7 +715,13 @@ export function Footer({ logo }: { logo: React.ReactNode }) {
                 aria-label={s.label}
                 className="grid size-9.5 place-items-center rounded-xl border border-hair bg-tint text-fog transition-all duration-250 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-[#0d1b2a]"
               >
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
                   <path d={s.path} />
                 </svg>
               </a>

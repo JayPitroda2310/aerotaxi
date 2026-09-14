@@ -173,14 +173,6 @@ html:not([data-theme="dark"]) .text-accent {
   }
 }
 
-@utility dashed-route {
-  background: repeating-linear-gradient(
-    90deg,
-    rgb(58 160 238 / 0.5) 0 5px,
-    transparent 5px 10px
-  );
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
