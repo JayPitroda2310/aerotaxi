@@ -68,8 +68,8 @@ export default function About() {
         </div>
       </section>
 
-      <Fleet />
       <Founders />
+      <Fleet />
     </main>
   );
 }
