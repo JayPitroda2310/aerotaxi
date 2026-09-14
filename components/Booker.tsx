@@ -239,13 +239,18 @@ export default function Booker() {
             same buttons become a segmented track: the dots drop away, the
             halves split the width, and a blue thumb slides under the live one.
 
-            The thumb is the deeper route blue rather than the accent: the
-            label on it is white, and white on the accent is 2.82:1 — dropping
-            the accent's opacity to soften it only drives that down further
-            (1.80:1 at half). Deepening instead calms the colour and takes the
-            label to 5.07:1. Pinned to a literal rather than var(--color-route)
-            because that token flips bright in the dark theme, where white on
-            it would fall back to 2.18:1.
+            The thumb is the deeper route blue rather than the accent, held
+            at 85%. The label on it is white, and that is what sets the floor:
+            white on the accent is only 2.82:1, so the softening has to come
+            off a deeper base. At 85% this composites to #3985c1 against the
+            track and carries white at 3.96:1 — below the 4.5:1 AA line for
+            text this size, and a deliberate trade for the lighter element.
+            95% would be the last compliant step (4.68:1) but is almost
+            indistinguishable from solid.
+
+            Pinned to a literal rather than var(--color-route) because that
+            token flips bright in the dark theme; there the same value sits on
+            a dark panel instead and white reads at 6.02:1.
             Nothing is duplicated — only the skin changes at the breakpoint.
           */}
           <div className="relative flex flex-wrap gap-1 max-md:w-full max-md:flex-nowrap max-md:gap-0 max-md:rounded-xl max-md:border max-md:border-hair max-md:bg-tint max-md:p-1">
@@ -256,7 +261,7 @@ export default function Booker() {
             */}
             <span
               aria-hidden
-              className={`pointer-events-none absolute top-1 bottom-1 left-1 hidden w-[calc(50%-0.25rem)] rounded-lg bg-[#1b72b8] shadow-[0_2px_6px_-2px_rgb(27_114_184/0.45)] transition-transform duration-300 ease-out-soft max-md:block ${
+              className={`pointer-events-none absolute top-1 bottom-1 left-1 hidden w-[calc(50%-0.25rem)] rounded-lg bg-[#1b72b8]/85 shadow-[0_2px_6px_-2px_rgb(27_114_184/0.35)] transition-transform duration-300 ease-out-soft max-md:block ${
                 trip === "Round Trip" ? "translate-x-full" : "translate-x-0"
               }`}
             />
