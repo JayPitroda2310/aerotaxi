@@ -240,23 +240,21 @@ export default function Booker() {
             halves split the width, and a blue thumb slides under the live one.
 
             The thumb is the deeper route blue rather than the accent, held
-            at 85%. The label on it is white, and that is what sets the floor:
-            white on the accent is only 2.82:1, so the softening has to come
-            off a deeper base. At 85% this composites to #3985c1 against the
-            track and carries white at 3.96:1 — below the 4.5:1 AA line for
-            text this size, and a deliberate trade for the lighter element.
-            95% would be the last compliant step (4.68:1) but is almost
-            indistinguishable from solid.
+            at 85%, which composites to #3985c1 against the track. The label
+            on it is black: 5.30:1 there, where white would be 3.96:1 and miss
+            the 4.5:1 AA line for text this size. In the dark theme the same
+            thumb sits on a dark panel and lands at #1a66a5, where black is
+            3.49:1 — the one place white would have read better.
 
             Pinned to a literal rather than var(--color-route) because that
-            token flips bright in the dark theme; there the same value sits on
-            a dark panel instead and white reads at 6.02:1.
+            token flips bright in the dark theme, which would have taken the
+            thumb somewhere else entirely.
 
             The live label is md:text-route / max-md:text-white rather than a
             plain text-accent with a variant over it. globals.css carries an
             UNLAYERED "html:not([data-theme=dark]) .text-accent" rule, and an
             unlayered rule beats every layer regardless of specificity — so a
-            max-md:text-white utility sitting in @layer utilities lost to it
+            max-md text colour utility in @layer utilities lost to it
             and the label came out route blue on a route blue thumb. Keeping
             the literal text-accent class off the element entirely is what
             stops that rule matching.
@@ -284,7 +282,7 @@ export default function Booker() {
                   aria-pressed={on}
                   className={`relative z-1 inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-all duration-250 max-md:flex-1 max-md:justify-center max-md:rounded-lg max-md:border-transparent max-md:bg-transparent max-md:py-1.5 ${
                     on
-                      ? "border-accent/30 bg-accent/10 md:text-route max-md:text-white"
+                      ? "border-accent/30 bg-accent/10 md:text-route max-md:text-black"
                       : "border-transparent text-fog hover:text-head"
                   }`}
                 >
