@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import AuthModal, { type AuthMode } from "./AuthModal";
 import { Button, ButtonLink } from "./ui";
 
@@ -219,6 +219,32 @@ export default function Navbar() {
     setOpen(false);
   };
 
+  /**
+   * Closes the menu, and when the target is an anchor on the page already
+   * showing, scrolls to it without writing the hash into the address bar —
+   * the treatment AnchorLink gives in-page jumps. "Routes" is /#routes, so
+   * from the home page it used to leave #routes behind; history and
+   * autocomplete then kept the full URL and the next visit opened on the
+   * route map instead of the top. Links to another page still carry their
+   * hash, and CleanHash clears it once it has been honoured.
+   */
+  const navTo = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+    closeAll();
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    const cut = href.indexOf("#");
+    if (cut < 0) return;
+    if (window.location.pathname !== (href.slice(0, cut) || "/")) return;
+    const el = document.getElementById(href.slice(cut + 1));
+    if (!el) return;
+    e.preventDefault();
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search,
+    );
+  };
+
   const openAuth = (m: AuthMode) => {
     closeAll();
     setAuth(m);
@@ -255,7 +281,7 @@ export default function Navbar() {
                 <Link
                   key={l.label}
                   href={l.href!}
-                  onClick={closeAll}
+                  onClick={(e) => navTo(e, l.href!)}
                   aria-current={current ? "page" : undefined}
                   className={linkClass}
                 >
@@ -332,7 +358,7 @@ export default function Navbar() {
                       <li key={it.label}>
                         <Link
                           href={it.href}
-                          onClick={closeAll}
+                          onClick={(e) => navTo(e, it.href)}
                           className="block rounded-xl px-3.5 py-2.5 text-[14px] font-medium text-fog transition-colors duration-200 hover:bg-tint hover:text-accent"
                         >
                           {it.label}

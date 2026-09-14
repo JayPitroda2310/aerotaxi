@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import CleanHash from "@/components/CleanHash";
 import Navbar, { Logo } from "@/components/Navbar";
 import { Footer } from "@/components/Sections";
 import { Inter, Sora, Space_Grotesk } from "next/font/google";
@@ -38,14 +39,24 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sora.variable} ${inter.variable} ${spaceGrotesk.variable}`}>
       <head>
-        {/* apply the stored theme before first paint so there is no flash */}
+        {/*
+          Applies the stored theme before first paint so there is no flash,
+          and turns off the browser's scroll restoration.
+
+          Restoration is the other half of landing mid-page: reopening the
+          site from history reinstated wherever the last visit had scrolled
+          to, which read as the site opening on the route map. Set here rather
+          than in an effect because the browser decides what to restore before
+          React runs.
+        */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{var t=localStorage.getItem("aerotaxi-theme")||"light";document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}`,
+            __html: `try{var t=localStorage.getItem("aerotaxi-theme")||"light";document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="light"}try{if("scrollRestoration" in history)history.scrollRestoration="manual"}catch(e){}`,
           }}
         />
       </head>
       <body>
+        <CleanHash />
         <Navbar />
         {children}
         <Footer logo={<Logo />} />
