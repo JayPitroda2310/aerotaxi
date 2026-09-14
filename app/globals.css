@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Air Taxi design tokens — light blue on white
+   ============================================================ */
+@theme {
+  --color-ink: #ffffff;
+  --color-ink-2: #f3f8fd;
+  --color-panel: #ffffff;
+  --color-panel-2: #e9f2fb;
+
+  --color-accent: #3aa0ee;
+  --color-accent-light: #8ccbfa;
+  --color-accent-dark: #1f7cc4;
+  /* deeper blue for text and SVG strokes, which need contrast on white */
+  --color-route: #1b72b8;
+
+  --color-fog: #55606c;
+  --color-fog-2: #7d8896;
+
+  /* theme-aware neutrals — flipped by [data-theme="dark"] below */
+  --color-head: #0d1b2a;
+  --color-body: #2a3a4a;
+  --color-hair: rgb(13 27 42 / 0.13);
+  --color-tint: rgb(13 27 42 / 0.04);
+
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* only the footer wordmark uses this */
+  --font-wordmark: var(--font-space-grotesk), var(--font-sora), sans-serif;
+
+
+  --ease-out-soft: cubic-bezier(0.22, 0.9, 0.24, 1);
+}
+
+
+
+
+
+
+/* ============================================================
+   Base
+   ============================================================ */
+@layer base {
+  html {
+    /*
+     * Sideways overflow is clipped on the root, not on body.
+     *
+     * "hidden" would make its element a scroll container and silently break
+     * position:sticky further down the page. "clip" never does that, but on
+     * body it depends on overflow propagating to the viewport, which browsers
+     * have been inconsistent about for clip. Where it does not propagate, body
+     * becomes a containing block and position:fixed children — the navbar —
+     * scroll away with the page. On the root neither problem arises.
+     */
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    color-scheme: light;
+  }
+
+  /* ---- dark theme ---------------------------------------------- */
+  html[data-theme="dark"] {
+    color-scheme: dark;
+
+    --color-ink: #060b12;
+    --color-ink-2: #0a1320;
+    --color-panel: #0e1a2b;
+    --color-panel-2: #132338;
+
+    --color-fog: #93a3b5;
+    --color-fog-2: #6b7c8f;
+
+    /* on navy the brighter blue is the legible one */
+    --color-route: #5bb8f5;
+
+    --color-head: #ffffff;
+    --color-body: #dbe4ee;
+    --color-hair: rgb(255 255 255 / 0.10);
+    --color-tint: rgb(255 255 255 / 0.05);
+  }
+
+
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-head);
+    transition: background 0.3s ease, color 0.3s ease;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #000;
+  }
+
+  /* Narrow viewports get no scrollbar chrome at all. This covers the page
+     itself as well as anything that scrolls inside it — the nav drawer and
+     the menu panels — so nothing draws a gutter down the side. */
+  @media (max-width: 767.98px) {
+    * {
+      scrollbar-width: none;
+    }
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
+    }
+  }
+
+  /* A styled scrollbar only makes sense where there is a pointer. On touch
+     this replaced the platform's overlay scrollbar with a permanent 11px
+     gutter down the side of the page. */
+  @media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 11px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: color-mix(in srgb, var(--color-head) 18%, var(--color-ink));
+      border-radius: 9px;
+      border: 3px solid var(--color-ink);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-accent-dark);
+    }
+  }
+
+
+}
+
+/* Deliberately OUTSIDE @layer base. Tailwind puts .text-accent in the
+   utilities layer, and layer order beats specificity — a layered rule, however
+   specific, loses to it. Unlayered CSS outranks every layer, so this is what
+   makes accent text legible on white: the fill blue is only 2.8:1 there, the
+   deeper route blue is 5.1:1. On navy the utility's own colour already passes,
+   so it is left alone. */
+html:not([data-theme="dark"]) .text-accent {
+  color: var(--color-route);
+}
+
+/* ============================================================
+   Reusable pieces
+   ============================================================ */
+
+
+
+
+/* SMIL cannot be paused from CSS, so the aircraft simply stand down.
+   The dotted corridors stay, so every route is still legible. */
+@media (prefers-reduced-motion: reduce) {
+  .in-flight {
+    display: none;
+  }
+}
+
+@utility dashed-route {
+  background: repeating-linear-gradient(
+    90deg,
+    rgb(58 160 238 / 0.5) 0 5px,
+    transparent 5px 10px
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
