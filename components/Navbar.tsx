@@ -80,7 +80,12 @@ export function Logo({ className = "" }: { className?: string }) {
 /* ------------------------------------------------------------------ */
 
 function ThemeToggle({ className = "" }: { className?: string }) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  /* "light" to match the inline script in the layout, which falls back to
+     light when nothing is stored. Starting at "dark" server-rendered the
+     wrong icon on every default load and swapped it on mount — a flash that
+     was easy to miss in the drawer and is not, now the control sits in the
+     bar. A stored dark preference still corrects in the effect below. */
+  const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
     setTheme(
@@ -340,7 +345,7 @@ export default function Navbar() {
             );
           })}
 
-          {/* everything the bar sheds on small screens lands here */}
+          {/* what the bar sheds on small screens lands here */}
           <div className="hidden border-t border-hair pt-3 max-lg:mt-2 max-lg:block">
             <div className="mt-2 flex gap-2">
               <Button
@@ -360,19 +365,15 @@ export default function Navbar() {
                 Sign Up
               </Button>
             </div>
-
-            <div className="mt-3 flex items-center justify-between border-t border-hair pt-3">
-              <span className="pl-1 text-[13.5px] text-fog">Appearance</span>
-              <ThemeToggle />
-            </div>
           </div>
         </nav>
 
-        {/* On phones the bar carries the logo and the menu button and nothing
-            else — the theme toggle and the auth pair live in the
-            drawer, where they get room to breathe. */}
+        {/* On phones the bar carries the logo, the theme toggle and the menu
+            button. The toggle earns its place there because it is a single
+            tap that changes the whole page — burying it in the drawer made it
+            a three-step job. The auth pair still sheds into the drawer. */}
         <div className="ml-3 flex items-center gap-2 max-lg:ml-auto max-lg:mr-1">
-          <ThemeToggle className="max-lg:hidden" />
+          <ThemeToggle />
           <Button
             variant="outline"
             size="sm"
