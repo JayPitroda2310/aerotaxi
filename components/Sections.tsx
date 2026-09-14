@@ -777,14 +777,17 @@ export function Footer({ logo }: { logo: React.ReactNode }) {
       </div>
 
       {/* ---------- oversized wordmark ---------- */}
-      <div aria-hidden className="overflow-hidden">
+      {/* The same px-6 gutter the rest of the page uses, so the word stops
+          short of the screen edges instead of running into them. It still
+          reads as full-bleed against the 1240-wide content above it. */}
+      <div aria-hidden className="overflow-hidden px-6">
         <svg
           viewBox="0 0 1000 126"
           preserveAspectRatio="xMidYMax meet"
           className="block w-full"
         >
           {/*
-            textLength pins the word to the full page width, and
+            textLength pins the word to the full width available to it, and
             lengthAdjust="spacing" opens only the gaps — "spacingAndGlyphs"
             would scale the outlines themselves and fatten them.
 
