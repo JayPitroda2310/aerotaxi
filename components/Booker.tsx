@@ -251,6 +251,15 @@ export default function Booker() {
             Pinned to a literal rather than var(--color-route) because that
             token flips bright in the dark theme; there the same value sits on
             a dark panel instead and white reads at 6.02:1.
+
+            The live label is md:text-route / max-md:text-white rather than a
+            plain text-accent with a variant over it. globals.css carries an
+            UNLAYERED "html:not([data-theme=dark]) .text-accent" rule, and an
+            unlayered rule beats every layer regardless of specificity — so a
+            max-md:text-white utility sitting in @layer utilities lost to it
+            and the label came out route blue on a route blue thumb. Keeping
+            the literal text-accent class off the element entirely is what
+            stops that rule matching.
             Nothing is duplicated — only the skin changes at the breakpoint.
           */}
           <div className="relative flex flex-wrap gap-1 max-md:w-full max-md:flex-nowrap max-md:gap-0 max-md:rounded-xl max-md:border max-md:border-hair max-md:bg-tint max-md:p-1">
@@ -275,7 +284,7 @@ export default function Booker() {
                   aria-pressed={on}
                   className={`relative z-1 inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-all duration-250 max-md:flex-1 max-md:justify-center max-md:rounded-lg max-md:border-transparent max-md:bg-transparent max-md:py-1.5 ${
                     on
-                      ? "border-accent/30 bg-accent/10 text-accent max-md:text-white"
+                      ? "border-accent/30 bg-accent/10 md:text-route max-md:text-white"
                       : "border-transparent text-fog hover:text-head"
                   }`}
                 >
