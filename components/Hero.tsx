@@ -39,10 +39,18 @@ export default function Hero() {
               Fly <Hl>Gujarat</Hl> direct.
             </h1>
 
+            {/* The last clause is dropped on a phone, where the paragraph
+                runs to several lines and the point is already made. The comma
+                that joined it goes with it and the full stop stays outside the
+                span, so the short form ends cleanly rather than on a dangling
+                comma. */}
             <p className="max-w-[46ch] text-[16.5px] leading-relaxed text-fog max-lg:max-w-none">
               Four short-hop routes linking Mundra with Vadodara, Jamnagar, Diu
-              and Rajkot. Small airfields, no check-in queues, and no long drive
-              to an international terminal first.
+              and Rajkot. Small airfields, no check-in queues
+              <span className="max-sm:hidden">
+                , and no long drive to an international terminal first
+              </span>
+              .
             </p>
 
             {/* The launch date and the shape of the network, as data.
